@@ -26,7 +26,7 @@
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            min-width: 280px;
+            min-width: 300px;
         }
 
         .popup-table td {
@@ -38,7 +38,7 @@
             border-bottom: none;
         }
 
-        /* Desain Custom untuk Scrollbar di dalam Pop-up */
+        /* Desain Custom Scrollbar */
         .scrollable-popup::-webkit-scrollbar {
             width: 6px;
         }
@@ -62,7 +62,7 @@
 <body>
 
     <div
-        style="position: absolute; top: 20px; left: 20px; z-index: 10; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-family: sans-serif; width: 180px;">
+        style="position: absolute; top: 20px; left: 20px; z-index: 10; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-family: sans-serif; width: 200px;">
         <h3
             style="margin-top: 0; margin-bottom: 15px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; color: #333;">
             Layer Peta</h3>
@@ -81,33 +81,54 @@
             Jalan Tol
         </label>
 
-        <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px;">
+        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
             <input type="checkbox" id="toggle-posko" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span
-                style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; border: 2px solid white; box-shadow: 0 0 2px rgba(0,0,0,0.5); margin-right: 8px;"></span>
+            <span style="font-size: 18px; margin-right: 8px;">⛺</span>
             Posko Mudik
+        </label>
+
+        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
+            <input type="checkbox" id="toggle-banjir" checked style="margin-right: 10px; width: 16px; height: 16px;">
+            <span style="font-size: 18px; margin-right: 8px;">🌊</span>
+            Rawan Banjir
+        </label>
+
+        <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px;">
+            <input type="checkbox" id="toggle-longsor" checked style="margin-right: 10px; width: 16px; height: 16px;">
+            <span style="font-size: 18px; margin-right: 8px;">🪨</span>
+            Rawan Longsor
         </label>
     </div>
 
     <div
         style="position: absolute; bottom: 30px; right: 20px; z-index: 10; background: white; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); font-family: sans-serif; width: 220px; overflow: hidden;">
 
-        <div style="padding: 15px; border-bottom: 1px solid #eaeaea;">
-            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Posko Mudik 2026</div>
-            <div
-                style="width: 16px; height: 16px; border-radius: 50%; background-color: #f59e0b; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4); margin-left: 5px;">
-            </div>
+        <div
+            style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 13px; font-weight: 600; color: #444;">Posko Mudik</div>
+            <span style="font-size: 18px;">⛺</span>
         </div>
 
-        <div style="padding: 15px; border-bottom: 1px solid #eaeaea;">
-            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Jalan Tol</div>
-            <div style="width: 50px; height: 4px; background-color: #3b82f6; border-radius: 2px; margin-left: 5px;">
-            </div>
+        <div
+            style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 13px; font-weight: 600; color: #444;">Rawan Banjir</div>
+            <span style="font-size: 18px;">🌊</span>
         </div>
 
-        <div style="padding: 15px;">
-            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Jalan Nasional</div>
-            <div style="width: 50px; height: 2px; background-color: #e63946; margin-left: 5px;"></div>
+        <div
+            style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 13px; font-weight: 600; color: #444;">Rawan Longsor</div>
+            <span style="font-size: 18px;">🪨</span>
+        </div>
+
+        <div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center;">
+            <div style="font-size: 13px; font-weight: 600; color: #444; width: 100px;">Jalan Tol</div>
+            <div style="width: 50px; height: 4px; background-color: #3b82f6; border-radius: 2px;"></div>
+        </div>
+
+        <div style="padding: 12px 15px; display: flex; align-items: center;">
+            <div style="font-size: 13px; font-weight: 600; color: #444; width: 100px;">Jalan Nasional</div>
+            <div style="width: 50px; height: 2px; background-color: #e63946;"></div>
         </div>
 
     </div>
@@ -115,109 +136,136 @@
     <div id="map"></div>
 
     <script>
-        // 1. INISIALISASI PETA
         const map = new maplibregl.Map({
             container: 'map',
-            style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+            style: {
+                'version': 8,
+                'glyphs': 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+                'sources': {
+                    'osm': {
+                        'type': 'raster',
+                        'tiles': ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        'tileSize': 256,
+                        'attribution': '© OpenStreetMap Contributors'
+                    }
+                },
+                'layers': [{
+                    'id': 'osm-layer',
+                    'type': 'raster',
+                    'source': 'osm',
+                    'minzoom': 0,
+                    'maxzoom': 19
+                }]
+            },
             bounds: [
                 [95.0, -11.0],
                 [141.0, 6.0]
             ],
-            fitBoundsOptions: {
-                padding: 20
-            }
+            fitBoundsOptions: { padding: 20 }
         });
 
         map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
-        // 2. MEMUAT DATA LAYER
-        map.on('load', () => {
+        // Fungsi menggambar Emoji ke Kanvas Peta
+        async function buatIkonDariEmoji(map, idNama, emoji, ukuran = 40) {
+            const canvas = document.createElement('canvas');
+            canvas.width = ukuran;
+            canvas.height = ukuran;
+            const ctx = canvas.getContext('2d');
 
-            // --- JALAN NASIONAL ---
-            map.addSource('data-jalan-nasional', {
+            ctx.font = `${ukuran * 0.75}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, ukuran / 2, (ukuran / 2) + 2);
+
+            const img = new Image();
+            img.src = canvas.toDataURL();
+
+            await new Promise(resolve => img.onload = resolve);
+            if (!map.hasImage(idNama)) {
+                map.addImage(idNama, img);
+            }
+        }
+
+        map.on('load', async () => {
+
+            // 1. Generate Ikon Emoji
+            await Promise.all([
+                buatIkonDariEmoji(map, 'emoji-posko', '⛺'),
+                buatIkonDariEmoji(map, 'emoji-banjir', '🌊'),
+                buatIkonDariEmoji(map, 'emoji-longsor', '🪨')
+            ]);
+
+            // 2. Garis Jalan
+            map.addSource('data-jalan-nasional', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/Jalan_Nasional_PPK_Satker/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
+            map.addLayer({ id: 'layer-jalan-nasional', type: 'line', source: 'data-jalan-nasional', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#e63946', 'line-width': 2, 'line-opacity': 0.8 } });
+
+            map.addSource('data-jalan-tol', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Tol/Jalan_Tol_Operasi/MapServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
+            map.addLayer({ id: 'layer-jalan-tol', type: 'line', source: 'data-jalan-tol', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 0.9 } });
+
+            // 3. LAYER DATA RAWAN BENCANA
+            map.addSource('data-bencana', {
                 type: 'geojson',
-                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/Jalan_Nasional_PPK_Satker/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
+                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
             });
+
             map.addLayer({
-                id: 'layer-jalan-nasional',
-                type: 'line',
-                source: 'data-jalan-nasional',
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: { 'line-color': '#e63946', 'line-width': 2, 'line-opacity': 0.7 }
+                id: 'layer-banjir',
+                type: 'symbol',
+                source: 'data-bencana',
+                filter: ['any', ['==', ['get', 'jenis'], 'RawanBanjir'], ['==', ['get', 'jenis'], 'RawanBanjirBandang']],
+                layout: { 'icon-image': 'emoji-banjir', 'icon-size': 0.8, 'icon-allow-overlap': true }
             });
 
-            // --- JALAN TOL ---
-            map.addSource('data-jalan-tol', {
-                type: 'geojson',
-                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Tol/Jalan_Tol_Operasi/MapServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
-            });
             map.addLayer({
-                id: 'layer-jalan-tol',
-                type: 'line',
-                source: 'data-jalan-tol',
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 0.9 }
+                id: 'layer-longsor',
+                type: 'symbol',
+                source: 'data-bencana',
+                filter: ['==', ['get', 'jenis'], 'RawanLongsor'],
+                layout: { 'icon-image': 'emoji-longsor', 'icon-size': 0.8, 'icon-allow-overlap': true }
             });
 
-            // --- POSKO MUDIK ---
-            map.addSource('data-posko', {
-                type: 'geojson',
-                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
-            });
+            // 4. Layer Posko
+            map.addSource('data-posko', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
             map.addLayer({
                 id: 'layer-posko',
-                type: 'circle',
+                type: 'symbol',
                 source: 'data-posko',
-                paint: {
-                    'circle-radius': 6,
-                    'circle-color': '#f59e0b',
-                    'circle-stroke-width': 2,
-                    'circle-stroke-color': '#ffffff'
-                }
+                layout: { 'icon-image': 'emoji-posko', 'icon-size': 0.9, 'icon-allow-overlap': true }
             });
 
-            // 3. INTERAKSI KLIK & HOVER POSKO MUDIK
-            map.on('mouseenter', 'layer-posko', () => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-            map.on('mouseleave', 'layer-posko', () => {
-                map.getCanvas().style.cursor = '';
-            });
-
-            map.on('click', 'layer-posko', (e) => {
+            // =====================================
+            // 5. FITUR POPUP (DILENGKAPI PENDETEKSI FOTO)
+            // =====================================
+            // Parameter baseUrlLayer ditambahkan untuk mengetahui alamat server asal layer tersebut
+            function tampilkanPopup(e, warnaAksen, judulPopup, emojiBawaan, baseUrlLayer) {
                 const props = e.features[0].properties;
                 const koordinat = e.features[0].geometry.coordinates.slice();
 
+                // Mengambil ID unik dari data (biasanya bernama objectid atau OBJECTID)
+                const objectId = props.objectid || props.OBJECTID;
+                const idDivFoto = 'foto-' + Math.random().toString(36).substr(2, 9); // ID acak untuk wadah foto
+
                 let isiPopup = `
                     <div style="font-family: sans-serif;">
-                        <div style="border-bottom: 2px solid #f59e0b; padding-bottom: 8px; margin-bottom: 5px;">
-                            <h3 style="margin: 0; font-size: 15px; color: #333;">⛺ Detail Posko Mudik</h3>
+                        <div style="border-bottom: 2px solid ${warnaAksen}; padding-bottom: 8px; margin-bottom: 5px; display: flex; align-items: center;">
+                            <span style="font-size: 20px; margin-right: 8px;">${emojiBawaan}</span>
+                            <h3 style="margin: 0; font-size: 16px; color: #333;">${judulPopup}</h3>
                         </div>
-                        <div class="scrollable-popup" style="max-height: 250px; overflow-y: auto; padding-right: 8px;">
+                        <div class="scrollable-popup" style="max-height: 350px; overflow-y: auto; padding-right: 8px;">
                             <table style="width: 100%; font-size: 13px; border-collapse: collapse; text-align: left;">
                 `;
 
                 for (let key in props) {
                     if (props[key] !== null && props[key] !== '' && key.toLowerCase() !== 'objectid' && key.toLowerCase() !== 'globalid') {
-
                         let labelFormated = key.replace(/_/g, ' ');
                         let dataValue = props[key];
 
                         if (typeof dataValue === 'string') {
-                            // 1. Ubah titik koma (;) menjadi koma berspasi (, )
                             dataValue = dataValue.replace(/;\s*/g, ', ');
-
-                            // 2. Beri spasi setelah kata BBPJN atau BPJN jika menempel dengan huruf setelahnya
                             dataValue = dataValue.replace(/(BBPJN|BPJN)(?=[A-Z])/g, '$1 ');
-
-                            // 3. Beri spasi setelah singkatan provinsi (DKI, DIY, dll) jika menempel
                             dataValue = dataValue.replace(/(DKI|DIY|NTB|NTT)(?=[A-Z])/g, '$1 ');
-
-                            // 4. Pisahkan huruf kecil yang langsung menempel dengan huruf besar (CamelCase)
-                            // (Contoh: "JakartaJabar" jadi "Jakarta Jabar")
                             dataValue = dataValue.replace(/([a-z])([A-Z])/g, '$1 $2');
-
-                            // 5. Ubah spasi antar provinsi menjadi tanda strip agar lebih estetik
                             dataValue = dataValue.replace(/Jakarta Jabar/gi, 'Jakarta - Jabar');
                             dataValue = dataValue.replace(/Jateng DIY/gi, 'Jateng - DIY');
                             dataValue = dataValue.replace(/Jatim Bali/gi, 'Jatim - Bali');
@@ -236,34 +284,101 @@
                     }
                 }
 
-                isiPopup += `
-                            </table>
-                        </div>
-                    </div>
-                `;
+                isiPopup += `</table>`;
+
+                // Menyisipkan wadah (container) kosong untuk foto yang akan dimuat nanti
+                if (baseUrlLayer && objectId) {
+                    isiPopup += `<div id="${idDivFoto}" style="margin-top: 15px; text-align: center; font-size: 12px; color: #888;">Sedang mengecek foto...</div>`;
+                }
+
+                isiPopup += `</div></div>`;
 
                 while (Math.abs(e.lngLat.lng - koordinat[0]) > 180) {
                     koordinat[0] += e.lngLat.lng > koordinat[0] ? 360 : -360;
                 }
 
+                // Tampilkan Popup ke layar
                 new maplibregl.Popup({ closeButton: true, maxWidth: '320px' })
                     .setLngLat(koordinat)
                     .setHTML(isiPopup)
                     .addTo(map);
+
+                // ==========================================
+                // LOGIKA MENARIK FOTO SECARA ASYNCHRONOUS
+                // ==========================================
+                // Setelah popup muncul di layar, kita tembak server Bina Marga untuk mencari attachment fotonya
+                if (baseUrlLayer && objectId) {
+                    const urlAttachment = `${baseUrlLayer}/${objectId}/attachments?f=json`;
+
+                    fetch(urlAttachment)
+                        .then(response => response.json())
+                        .then(data => {
+                            const wadahFoto = document.getElementById(idDivFoto);
+                            if (wadahFoto) {
+                                // Jika ada lampiran fotonya
+                                if (data.attachmentInfos && data.attachmentInfos.length > 0) {
+                                    let htmlFoto = '<h4 style="margin: 10px 0; font-size: 14px; color: #333; text-align: left; border-top: 1px solid #eee; padding-top: 10px;">📸 Foto Lokasi:</h4>';
+
+                                    // Looping untuk merender semua foto yang tersedia
+                                    data.attachmentInfos.forEach(att => {
+                                        const urlGambar = `${baseUrlLayer}/${objectId}/attachments/${att.id}`;
+                                        htmlFoto += `<img src="${urlGambar}" alt="Foto Lokasi" style="width: 100%; border-radius: 6px; margin-bottom: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
+                                    });
+
+                                    wadahFoto.innerHTML = htmlFoto; // Masukkan foto ke dalam popup
+                                } else {
+                                    // Jika tidak ada foto, hilangkan teks "Sedang mengecek foto..."
+                                    wadahFoto.innerHTML = '';
+                                }
+                            }
+                        })
+                        .catch(err => {
+                            // Jika terjadi error saat memuat foto, hilangkan pesan
+                            const wadahFoto = document.getElementById(idDivFoto);
+                            if (wadahFoto) wadahFoto.innerHTML = '';
+                        });
+                }
+            }
+
+            // Mendaftarkan kursor & klik
+            ['layer-posko', 'layer-banjir', 'layer-longsor'].forEach(layer => {
+                map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
+                map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
+            });
+
+            // Klik Posko Mudik (Menyertakan URL Base Layer Posko untuk menarik Foto)
+            map.on('click', 'layer-posko', (e) => {
+                tampilkanPopup(e, '#f59e0b', 'Detail Posko Mudik', '⛺', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0');
+            });
+
+            // Klik Rawan Banjir (Menyertakan URL Base Layer Bencana)
+            map.on('click', 'layer-banjir', (e) => {
+                tampilkanPopup(e, '#0ea5e9', 'Titik Rawan Banjir', '🌊', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0');
+            });
+
+            // Klik Rawan Longsor (Menyertakan URL Base Layer Bencana)
+            map.on('click', 'layer-longsor', (e) => {
+                tampilkanPopup(e, '#8b4513', 'Titik Rawan Longsor', '🪨', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0');
             });
         });
 
-        // 4. SCRIPT LOGIKA UNTUK MENU TOGGLE
+        // =====================================
+        // 6. LOGIKA TOGGLE
+        // =====================================
         document.getElementById('toggle-nasional').addEventListener('change', function (e) {
             map.setLayoutProperty('layer-jalan-nasional', 'visibility', e.target.checked ? 'visible' : 'none');
         });
-
         document.getElementById('toggle-tol').addEventListener('change', function (e) {
             map.setLayoutProperty('layer-jalan-tol', 'visibility', e.target.checked ? 'visible' : 'none');
         });
-
         document.getElementById('toggle-posko').addEventListener('change', function (e) {
             map.setLayoutProperty('layer-posko', 'visibility', e.target.checked ? 'visible' : 'none');
+        });
+        document.getElementById('toggle-banjir').addEventListener('change', function (e) {
+            map.setLayoutProperty('layer-banjir', 'visibility', e.target.checked ? 'visible' : 'none');
+        });
+        document.getElementById('toggle-longsor').addEventListener('change', function (e) {
+            map.setLayoutProperty('layer-longsor', 'visibility', e.target.checked ? 'visible' : 'none');
         });
     </script>
 
