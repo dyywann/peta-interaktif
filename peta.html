@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Mudik Interaktif - Bina Marga</title>
+
+    <script src="https://unpkg.com/maplibre-gl@3.x/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.x/dist/maplibre-gl.css" rel="stylesheet" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Styling Pop-up */
+        .mapboxgl-popup-content {
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            min-width: 280px;
+        }
+
+        .popup-table td {
+            padding: 6px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .popup-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Desain Custom untuk Scrollbar di dalam Pop-up */
+        .scrollable-popup::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-popup::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .scrollable-popup::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .scrollable-popup::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div
+        style="position: absolute; top: 20px; left: 20px; z-index: 10; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-family: sans-serif; width: 180px;">
+        <h3
+            style="margin-top: 0; margin-bottom: 15px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; color: #333;">
+            Layer Peta</h3>
+
+        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
+            <input type="checkbox" id="toggle-nasional" checked style="margin-right: 10px; width: 16px; height: 16px;">
+            <span
+                style="display: inline-block; width: 16px; height: 3px; background: #e63946; margin-right: 8px;"></span>
+            Jalan Nasional
+        </label>
+
+        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
+            <input type="checkbox" id="toggle-tol" checked style="margin-right: 10px; width: 16px; height: 16px;">
+            <span
+                style="display: inline-block; width: 16px; height: 5px; background: #3b82f6; margin-right: 8px;"></span>
+            Jalan Tol
+        </label>
+
+        <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px;">
+            <input type="checkbox" id="toggle-posko" checked style="margin-right: 10px; width: 16px; height: 16px;">
+            <span
+                style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; border: 2px solid white; box-shadow: 0 0 2px rgba(0,0,0,0.5); margin-right: 8px;"></span>
+            Posko Mudik
+        </label>
+    </div>
+
+    <div
+        style="position: absolute; bottom: 30px; right: 20px; z-index: 10; background: white; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); font-family: sans-serif; width: 220px; overflow: hidden;">
+
+        <div style="padding: 15px; border-bottom: 1px solid #eaeaea;">
+            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Posko Mudik 2026</div>
+            <div
+                style="width: 16px; height: 16px; border-radius: 50%; background-color: #f59e0b; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4); margin-left: 5px;">
+            </div>
+        </div>
+
+        <div style="padding: 15px; border-bottom: 1px solid #eaeaea;">
+            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Jalan Tol</div>
+            <div style="width: 50px; height: 4px; background-color: #3b82f6; border-radius: 2px; margin-left: 5px;">
+            </div>
+        </div>
+
+        <div style="padding: 15px;">
+            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Jalan Nasional</div>
+            <div style="width: 50px; height: 2px; background-color: #e63946; margin-left: 5px;"></div>
+        </div>
+
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        // 1. INISIALISASI PETA
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+            bounds: [
+                [95.0, -11.0],
+                [141.0, 6.0]
+            ],
+            fitBoundsOptions: {
+                padding: 20
+            }
+        });
+
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+        // 2. MEMUAT DATA LAYER
+        map.on('load', () => {
+
+            // --- JALAN NASIONAL ---
+            map.addSource('data-jalan-nasional', {
+                type: 'geojson',
+                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/Jalan_Nasional_PPK_Satker/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
+            });
+            map.addLayer({
+                id: 'layer-jalan-nasional',
+                type: 'line',
+                source: 'data-jalan-nasional',
+                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                paint: { 'line-color': '#e63946', 'line-width': 2, 'line-opacity': 0.7 }
+            });
+
+            // --- JALAN TOL ---
+            map.addSource('data-jalan-tol', {
+                type: 'geojson',
+                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Tol/Jalan_Tol_Operasi/MapServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
+            });
+            map.addLayer({
+                id: 'layer-jalan-tol',
+                type: 'line',
+                source: 'data-jalan-tol',
+                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 0.9 }
+            });
+
+            // --- POSKO MUDIK ---
+            map.addSource('data-posko', {
+                type: 'geojson',
+                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
+            });
+            map.addLayer({
+                id: 'layer-posko',
+                type: 'circle',
+                source: 'data-posko',
+                paint: {
+                    'circle-radius': 6,
+                    'circle-color': '#f59e0b',
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff'
+                }
+            });
+
+            // 3. INTERAKSI KLIK & HOVER POSKO MUDIK
+            map.on('mouseenter', 'layer-posko', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+            map.on('mouseleave', 'layer-posko', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            map.on('click', 'layer-posko', (e) => {
+                const props = e.features[0].properties;
+                const koordinat = e.features[0].geometry.coordinates.slice();
+
+                let isiPopup = `
+                    <div style="font-family: sans-serif;">
+                        <div style="border-bottom: 2px solid #f59e0b; padding-bottom: 8px; margin-bottom: 5px;">
+                            <h3 style="margin: 0; font-size: 15px; color: #333;">⛺ Detail Posko Mudik</h3>
+                        </div>
+                        <div class="scrollable-popup" style="max-height: 250px; overflow-y: auto; padding-right: 8px;">
+                            <table style="width: 100%; font-size: 13px; border-collapse: collapse; text-align: left;">
+                `;
+
+                for (let key in props) {
+                    if (props[key] !== null && props[key] !== '' && key.toLowerCase() !== 'objectid' && key.toLowerCase() !== 'globalid') {
+
+                        let labelFormated = key.replace(/_/g, ' ');
+                        let dataValue = props[key];
+
+                        if (typeof dataValue === 'string') {
+                            // 1. Ubah titik koma (;) menjadi koma berspasi (, )
+                            dataValue = dataValue.replace(/;\s*/g, ', ');
+
+                            // 2. Beri spasi setelah kata BBPJN atau BPJN jika menempel dengan huruf setelahnya
+                            dataValue = dataValue.replace(/(BBPJN|BPJN)(?=[A-Z])/g, '$1 ');
+
+                            // 3. Beri spasi setelah singkatan provinsi (DKI, DIY, dll) jika menempel
+                            dataValue = dataValue.replace(/(DKI|DIY|NTB|NTT)(?=[A-Z])/g, '$1 ');
+
+                            // 4. Pisahkan huruf kecil yang langsung menempel dengan huruf besar (CamelCase)
+                            // (Contoh: "JakartaJabar" jadi "Jakarta Jabar")
+                            dataValue = dataValue.replace(/([a-z])([A-Z])/g, '$1 $2');
+
+                            // 5. Ubah spasi antar provinsi menjadi tanda strip agar lebih estetik
+                            dataValue = dataValue.replace(/Jakarta Jabar/gi, 'Jakarta - Jabar');
+                            dataValue = dataValue.replace(/Jateng DIY/gi, 'Jateng - DIY');
+                            dataValue = dataValue.replace(/Jatim Bali/gi, 'Jatim - Bali');
+                        }
+
+                        isiPopup += `
+                                <tr>
+                                    <td style="color: #666; width: 40%; padding: 8px 0; border-bottom: 1px solid #f0f0f0; text-transform: capitalize; vertical-align: top;">
+                                        ${labelFormated}
+                                    </td>
+                                    <td style="font-weight: 600; padding: 8px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.5; color: #222;">
+                                        ${dataValue}
+                                    </td>
+                                </tr>
+                        `;
+                    }
+                }
+
+                isiPopup += `
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+                while (Math.abs(e.lngLat.lng - koordinat[0]) > 180) {
+                    koordinat[0] += e.lngLat.lng > koordinat[0] ? 360 : -360;
+                }
+
+                new maplibregl.Popup({ closeButton: true, maxWidth: '320px' })
+                    .setLngLat(koordinat)
+                    .setHTML(isiPopup)
+                    .addTo(map);
+            });
+        });
+
+        // 4. SCRIPT LOGIKA UNTUK MENU TOGGLE
+        document.getElementById('toggle-nasional').addEventListener('change', function (e) {
+            map.setLayoutProperty('layer-jalan-nasional', 'visibility', e.target.checked ? 'visible' : 'none');
+        });
+
+        document.getElementById('toggle-tol').addEventListener('change', function (e) {
+            map.setLayoutProperty('layer-jalan-tol', 'visibility', e.target.checked ? 'visible' : 'none');
+        });
+
+        document.getElementById('toggle-posko').addEventListener('change', function (e) {
+            map.setLayoutProperty('layer-posko', 'visibility', e.target.checked ? 'visible' : 'none');
+        });
+    </script>
+
+</body>
+
+</html>
