@@ -39,96 +39,166 @@
         }
 
         /* Desain Custom Scrollbar */
-        .scrollable-popup::-webkit-scrollbar {
+        .scrollable-content::-webkit-scrollbar {
             width: 6px;
         }
 
-        .scrollable-popup::-webkit-scrollbar-track {
+        .scrollable-content::-webkit-scrollbar-track {
             background: #f0f0f0;
             border-radius: 4px;
         }
 
-        .scrollable-popup::-webkit-scrollbar-thumb {
+        .scrollable-content::-webkit-scrollbar-thumb {
             background: #c1c1c1;
             border-radius: 4px;
         }
 
-        .scrollable-popup::-webkit-scrollbar-thumb:hover {
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
+        }
+
+        /* =========================================
+           STYLING UNTUK TOMBOL MENU KIRI ATAS
+           ========================================= */
+        .layer-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 2px solid #f0f0f0;
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: sans-serif;
+            color: #555;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .layer-btn:hover {
+            border-color: #d1d5db;
+            background-color: #f9fafb;
+        }
+
+        .layer-btn.active {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* =========================================
+           STYLING UNTUK KOTAK LEGENDA
+           ========================================= */
+        .legend-container {
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            z-index: 10;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-family: sans-serif;
+            width: 260px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .legend-section {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eaeaea;
+            transition: all 0.3s ease;
+        }
+
+        .legend-section:last-child {
+            border-bottom: none;
+        }
+
+        .legend-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 
 <body>
 
-    <div
-        style="position: absolute; top: 20px; left: 20px; z-index: 10; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-family: sans-serif; width: 200px;">
+    <div style="position: absolute; top: 20px; left: 20px; z-index: 10; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); font-family: sans-serif; width: 220px; max-height: 85vh; overflow-y: auto;"
+        class="scrollable-content">
         <h3
-            style="margin-top: 0; margin-bottom: 15px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; color: #333;">
+            style="margin-top: 0; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; color: #333;">
             Layer Peta</h3>
 
-        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
-            <input type="checkbox" id="toggle-nasional" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span
-                style="display: inline-block; width: 16px; height: 3px; background: #e63946; margin-right: 8px;"></span>
+        <button id="toggle-nasional" class="layer-btn active">
+            <span class="btn-icon"><span
+                    style="display: inline-block; width: 16px; height: 3px; background: #e63946;"></span></span>
             Jalan Nasional
-        </label>
+        </button>
 
-        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
-            <input type="checkbox" id="toggle-tol" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span
-                style="display: inline-block; width: 16px; height: 5px; background: #3b82f6; margin-right: 8px;"></span>
+        <button id="toggle-tol" class="layer-btn active">
+            <span class="btn-icon"><span
+                    style="display: inline-block; width: 16px; height: 5px; background: #3b82f6;"></span></span>
             Jalan Tol
-        </label>
+        </button>
 
-        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
-            <input type="checkbox" id="toggle-kondisi" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span
-                style="display: inline-block; width: 16px; height: 4px; background: linear-gradient(90deg, #10b981 33%, #facc15 33%, #facc15 66%, #ef4444 66%); border-radius: 2px; margin-right: 8px;"></span>
+        <button id="toggle-kondisi" class="layer-btn active">
+            <span class="btn-icon"><span
+                    style="display: inline-block; width: 16px; height: 4px; background: linear-gradient(90deg, #10b981 33%, #facc15 33%, #facc15 66%, #ef4444 66%); border-radius: 2px;"></span></span>
             Kondisi Jalan
-        </label>
+        </button>
 
-        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
-            <input type="checkbox" id="toggle-posko" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span style="font-size: 18px; margin-right: 8px;">⛺</span> Posko Mudik
-        </label>
+        <button id="toggle-jembatan" class="layer-btn active">
+            <span class="btn-icon">🌉</span> Kondisi Jembatan
+        </button>
 
-        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
-            <input type="checkbox" id="toggle-banjir" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span style="font-size: 18px; margin-right: 8px;">🌊</span> Rawan Banjir
-        </label>
+        <button id="toggle-posko" class="layer-btn active">
+            <span class="btn-icon">⛺</span> Posko Mudik
+        </button>
 
-        <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px;">
-            <input type="checkbox" id="toggle-longsor" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span style="font-size: 18px; margin-right: 8px;">🪨</span> Rawan Longsor
-        </label>
+        <button id="toggle-banjir" class="layer-btn active">
+            <span class="btn-icon">🌊</span> Rawan Banjir
+        </button>
+
+        <button id="toggle-longsor" class="layer-btn active">
+            <span class="btn-icon">🪨</span> Rawan Longsor
+        </button>
     </div>
 
-    <div
-        style="position: absolute; bottom: 30px; right: 20px; z-index: 10; background: white; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); font-family: sans-serif; width: 240px; overflow: hidden;">
+    <div id="legend-box" class="legend-container scrollable-content">
 
-        <div
-            style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-size: 13px; font-weight: 600; color: #444;">Posko Mudik</div>
-            <span style="font-size: 18px;">⛺</span>
+        <div id="legend-item-posko" class="legend-section">
+            <div class="legend-title">Posko Mudik 2026/1447 H</div>
+            <div style="font-size: 20px;">⛺</div>
         </div>
 
-        <div
-            style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-size: 13px; font-weight: 600; color: #444;">Rawan Banjir</div>
-            <span style="font-size: 18px;">🌊</span>
+        <div id="legend-item-tol" class="legend-section">
+            <div class="legend-title">Jalan Tol</div>
+            <div style="width: 40px; height: 4px; background-color: #3b82f6;"></div>
         </div>
 
-        <div
-            style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-size: 13px; font-weight: 600; color: #444;">Rawan Longsor</div>
-            <span style="font-size: 18px;">🪨</span>
+        <div id="legend-item-nasional" class="legend-section">
+            <div class="legend-title">Jalan Nasional</div>
+            <div style="width: 40px; height: 2px; background-color: #e63946;"></div>
         </div>
 
-        <div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea;">
-            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Kondisi Jalan (IRI)</div>
+        <div id="legend-item-kondisi" class="legend-section">
+            <div class="legend-title">Kondisi Jalan (IRI)</div>
             <div
-                style="display: flex; font-size: 10px; font-weight: bold; color: white; text-align: center; border-radius: 4px; overflow: hidden;">
+                style="display: flex; font-size: 10px; font-weight: bold; color: white; text-align: center; border-radius: 4px; overflow: hidden; margin-top: 5px;">
                 <div style="flex: 1; background: #10b981; padding: 5px 0;" title="0 - 4">Baik</div>
                 <div style="flex: 1; background: #facc15; color: #333; padding: 5px 0;" title="4 - 8">Sdg</div>
                 <div style="flex: 1; background: #f97316; padding: 5px 0;" title="8 - 12">Rgn</div>
@@ -136,14 +206,52 @@
             </div>
         </div>
 
-        <div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center;">
-            <div style="font-size: 13px; font-weight: 600; color: #444; width: 100px;">Jalan Tol</div>
-            <div style="width: 50px; height: 4px; background-color: #3b82f6; border-radius: 2px;"></div>
+        <div id="legend-item-jembatan" class="legend-section">
+            <div class="legend-title">Kondisi Jembatan</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #444;">
+                <div style="display: flex; align-items: center;">
+                    <span
+                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #0ea5e9; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,0.3); margin-right: 8px;"></span>
+                    (0) Baik
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span
+                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #10b981; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,0.3); margin-right: 8px;"></span>
+                    (1) Rusak Ringan
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span
+                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #facc15; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,0.3); margin-right: 8px;"></span>
+                    (2) Rusak Sedang
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span
+                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #f97316; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,0.3); margin-right: 8px;"></span>
+                    (3) Rusak Berat
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span
+                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,0.3); margin-right: 8px;"></span>
+                    (4) Kritis
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span
+                        style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #111827; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0,0,0,0.3); margin-right: 8px;"></span>
+                    (5) Lintasan Basah / Belum Terbangun
+                </div>
+            </div>
         </div>
 
-        <div style="padding: 12px 15px; display: flex; align-items: center;">
-            <div style="font-size: 13px; font-weight: 600; color: #444; width: 100px;">Jalan Nasional</div>
-            <div style="width: 50px; height: 2px; background-color: #e63946;"></div>
+        <div id="legend-group-rawan" class="legend-section">
+            <div class="legend-title">Peta Titik Rawan Mudik</div>
+            <div id="legend-item-banjir" style="display: flex; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 18px; width: 28px;">🌊</span>
+                <span style="font-size: 13px; color: #555;">Rawan Banjir</span>
+            </div>
+            <div id="legend-item-longsor" style="display: flex; align-items: center;">
+                <span style="font-size: 18px; width: 28px;">🪨</span>
+                <span style="font-size: 13px; color: #555;">Rawan Longsor</span>
+            </div>
         </div>
 
     </div>
@@ -199,106 +307,107 @@
             img.src = canvas.toDataURL();
 
             await new Promise(resolve => img.onload = resolve);
-            if (!map.hasImage(idNama)) {
-                map.addImage(idNama, img);
+            if (!map.hasImage(idNama)) map.addImage(idNama, img);
+        }
+
+        // =====================================================================
+        // FUNGSI SPATIAL CHUNKING
+        // =====================================================================
+        async function muatDataSpasial(baseUrlLayer, sourceId) {
+            const xMin = 95.0, xMax = 141.0, yMin = -11.0, yMax = 6.0;
+            const xCols = 6, yRows = 4;
+            const dx = (xMax - xMin) / xCols;
+            const dy = (yMax - yMin) / yRows;
+            let fetchPromises = [];
+
+            for (let i = 0; i < xCols; i++) {
+                for (let j = 0; j < yRows; j++) {
+                    const bXMin = xMin + i * dx, bYMin = yMin + j * dy;
+                    const bXMax = xMin + (i + 1) * dx, bYMax = yMin + (j + 1) * dy;
+
+                    const url = `${baseUrlLayer}/query?f=geojson&outFields=*&outSR=4326&where=1=1&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&geometry=${bXMin},${bYMin},${bXMax},${bYMax}`;
+
+                    fetchPromises.push(
+                        fetch(url).then(res => res.json()).catch(e => null)
+                    );
+                }
+            }
+
+            const results = await Promise.all(fetchPromises);
+            let allFeatures = [];
+            results.forEach(data => {
+                if (data && data.type === 'FeatureCollection' && data.features) {
+                    allFeatures = allFeatures.concat(data.features);
+                }
+            });
+
+            if (map.getSource(sourceId)) {
+                map.getSource(sourceId).setData({
+                    type: 'FeatureCollection',
+                    features: allFeatures
+                });
             }
         }
 
         map.on('load', async () => {
 
-            // 1. Generate Ikon Emoji
             await Promise.all([
                 buatIkonDariEmoji(map, 'emoji-posko', '⛺'),
                 buatIkonDariEmoji(map, 'emoji-banjir', '🌊'),
                 buatIkonDariEmoji(map, 'emoji-longsor', '🪨')
             ]);
 
-            // 2. Garis Jalan Nasional
+            // 1. Garis Jalan Nasional & Tol
             map.addSource('data-jalan-nasional', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/Jalan_Nasional_PPK_Satker/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
             map.addLayer({ id: 'layer-jalan-nasional', type: 'line', source: 'data-jalan-nasional', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#e63946', 'line-width': 2, 'line-opacity': 0.8 } });
 
-            // 3. Garis Jalan Tol
             map.addSource('data-jalan-tol', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Tol/Jalan_Tol_Operasi/MapServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
             map.addLayer({ id: 'layer-jalan-tol', type: 'line', source: 'data-jalan-tol', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 0.9 } });
 
-            // =========================================================================
-            // 4. LAYER KONDISI JALAN (Dikosongkan di awal, langsung diisi oleh fungsi pintar)
-            // =========================================================================
-            map.addSource('data-kondisi-jalan', {
-                type: 'geojson',
-                data: { type: 'FeatureCollection', features: [] }
-            });
-
+            // 2. LAYER KONDISI JALAN
+            map.addSource('data-kondisi-jalan', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
             map.addLayer({
-                id: 'layer-kondisi-jalan',
-                type: 'line',
-                source: 'data-kondisi-jalan',
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                id: 'layer-kondisi-jalan', type: 'line', source: 'data-kondisi-jalan', layout: { 'line-join': 'round', 'line-cap': 'round' },
                 paint: {
-                    'line-width': 7, // Dipertebal agar menutupi garis jalan nasional
+                    'line-width': 7,
                     'line-color': [
                         'case',
-                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 12], '#ef4444',   // Merah (Rusak Berat)
-                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 8], '#f97316',    // Oranye (Rusak Ringan)
-                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 4], '#facc15',    // Kuning (Sedang)
-                        '#10b981' // DEFAULT HIJAU JIKA KONDISI BAIK (<=4)
+                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 12], '#ef4444',
+                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 8], '#f97316',
+                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 4], '#facc15',
+                        '#10b981'
                     ],
                     'line-opacity': 1
                 }
             });
+            muatDataSpasial('https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/IRI_2_2025/FeatureServer/0', 'data-kondisi-jalan');
 
-            // --- FUNGSI PINTAR TARIK DATA (RADAR LAYAR) ---
-            let delayTarikData;
-            function muatDataKondisiJalan() {
-                // Jangan tarik data jika menu Kondisi Jalan sedang tidak dicentang
-                if (!document.getElementById('toggle-kondisi').checked) {
-                    map.getSource('data-kondisi-jalan').setData({ type: 'FeatureCollection', features: [] });
-                    return;
+            // 3. LAYER KONDISI JEMBATAN
+            map.addSource('data-jembatan', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+            map.addLayer({
+                id: 'layer-jembatan',
+                type: 'circle',
+                source: 'data-jembatan',
+                paint: {
+                    'circle-radius': 6,
+                    'circle-stroke-width': 1.5,
+                    'circle-stroke-color': '#ffffff',
+                    'circle-color': [
+                        'case',
+                        ['==', ['to-number', ['coalesce', ['get', 'jbt'], ['get', 'JBT'], -1]], 0], '#0ea5e9',
+                        ['==', ['to-number', ['coalesce', ['get', 'jbt'], ['get', 'JBT'], -1]], 1], '#10b981',
+                        ['==', ['to-number', ['coalesce', ['get', 'jbt'], ['get', 'JBT'], -1]], 2], '#facc15',
+                        ['==', ['to-number', ['coalesce', ['get', 'jbt'], ['get', 'JBT'], -1]], 3], '#f97316',
+                        ['==', ['to-number', ['coalesce', ['get', 'jbt'], ['get', 'JBT'], -1]], 4], '#ef4444',
+                        ['==', ['to-number', ['coalesce', ['get', 'jbt'], ['get', 'JBT'], -1]], 5], '#111827',
+                        '#9ca3af'
+                    ]
                 }
-
-                // Ambil koordinat batas layar saat ini
-                const bounds = map.getBounds();
-                const w = bounds.getWest();
-                const s = bounds.getSouth();
-                const e = bounds.getEast();
-                const n = bounds.getNorth();
-
-                // Perlebar areanya sedikit agar saat digeser jalannya tidak langsung putus
-                const dw = (e - w) * 0.2;
-                const dh = (n - s) * 0.2;
-
-                // Tembak server Bina Marga HANYA untuk jalan yang terlihat di layar ini (Anti-Crash!)
-                const url = `https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/IRI_2_2025/FeatureServer/0/query?f=geojson&geometry=${w - dw},${s - dh},${e + dw},${n + dh}&geometryType=esriGeometryEnvelope&inSR=4326&outSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&where=1=1&resultRecordCount=10000`;
-
-                fetch(url)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data && data.type === 'FeatureCollection' && map.getSource('data-kondisi-jalan')) {
-                            // Suntikkan jalan langsung ke layar!
-                            map.getSource('data-kondisi-jalan').setData(data);
-                        }
-                    })
-                    .catch(err => console.log('Sinyal ke server Bina Marga terputus'));
-            }
-
-            // 1. Eksekusi fungsi pintar LANGSUNG SAAT DETIK PERTAMA WEB DIBUKA
-            muatDataKondisiJalan();
-
-            // 2. Eksekusi ulang SETIAP KALI PETA SELESAI DIGESER/DIZOOM (Dengan delay agar server tidak ngadat)
-            map.on('moveend', () => {
-                clearTimeout(delayTarikData);
-                delayTarikData = setTimeout(muatDataKondisiJalan, 300);
             });
+            muatDataSpasial('https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/NK_JEMBATAN_2024/FeatureServer/0', 'data-jembatan');
 
-            // 3. Eksekusi otomatis jika menu dicentang
-            document.getElementById('toggle-kondisi').addEventListener('change', function (e) {
-                map.setLayoutProperty('layer-kondisi-jalan', 'visibility', e.target.checked ? 'visible' : 'none');
-                muatDataKondisiJalan();
-            });
 
-            // =====================================
-            // 5. LAYER DATA BENCANA & POSKO
-            // =====================================
+            // 4. LAYER DATA BENCANA & POSKO
             map.addSource('data-bencana', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
 
             map.addLayer({
@@ -321,129 +430,153 @@
             });
 
             // =====================================
-            // 6. FITUR POPUP (TERMASUK TARIK FOTO)
+            // 5. FITUR POPUP (DIPERBAIKI)
             // =====================================
-            function tampilkanPopup(e, warnaAksen, judulPopup, emojiBawaan, baseUrlLayer) {
+            function tampilkanPopup(e, warnaAksen, judulPopup, emojiBawaan, baseUrlLayer, customFields = null) {
                 const props = e.features[0].properties;
+                let koordinat = e.features[0].geometry.type === 'Point' ? e.features[0].geometry.coordinates.slice() : [e.lngLat.lng, e.lngLat.lat];
 
-                let koordinat;
                 if (e.features[0].geometry.type === 'Point') {
-                    koordinat = e.features[0].geometry.coordinates.slice();
-                    while (Math.abs(e.lngLat.lng - koordinat[0]) > 180) {
-                        koordinat[0] += e.lngLat.lng > koordinat[0] ? 360 : -360;
-                    }
-                } else {
-                    koordinat = [e.lngLat.lng, e.lngLat.lat];
+                    while (Math.abs(e.lngLat.lng - koordinat[0]) > 180) { koordinat[0] += e.lngLat.lng > koordinat[0] ? 360 : -360; }
                 }
 
-                const objectId = props.objectid || props.OBJECTID;
+                const objectId = props.objectid || props.OBJECTID || props.fid || props.FID || props.GlobalID || props.globalid;
                 const idDivFoto = 'foto-' + Math.random().toString(36).substr(2, 9);
 
                 let isiPopup = `
                     <div style="font-family: sans-serif;">
                         <div style="border-bottom: 2px solid ${warnaAksen}; padding-bottom: 8px; margin-bottom: 5px; display: flex; align-items: center;">
                             <span style="font-size: 20px; margin-right: 8px;">${emojiBawaan}</span>
-                            <h3 style="margin: 0; font-size: 16px; color: #333;">${judulPopup}</h3>
+                            <h3 style="margin: 0; font-size: 16px; color: #333; text-transform: uppercase;">${judulPopup}</h3>
                         </div>
-                        <div class="scrollable-popup" style="max-height: 350px; overflow-y: auto; padding-right: 8px;">
+                        <div class="scrollable-content" style="max-height: 350px; overflow-y: auto; padding-right: 8px;">
                             <table style="width: 100%; font-size: 13px; border-collapse: collapse; text-align: left;">
                 `;
 
-                for (let key in props) {
-                    if (props[key] !== null && props[key] !== '' && key.toLowerCase() !== 'objectid' && key.toLowerCase() !== 'globalid') {
-                        let labelFormated = key.replace(/_/g, ' ');
-                        let dataValue = props[key];
+                if (customFields) {
+                    customFields.forEach(item => {
+                        let dataValue = props[item.key];
+                        // Cegah nilai angka 0 dianggap undefined
+                        if (dataValue === undefined || dataValue === null) dataValue = props[item.key.toUpperCase()];
+                        if (dataValue === undefined || dataValue === null || dataValue === '') dataValue = '-';
 
-                        if (typeof dataValue === 'string') {
-                            dataValue = dataValue.replace(/;\s*/g, ', ');
-                            dataValue = dataValue.replace(/(BBPJN|BPJN)(?=[A-Z])/g, '$1 ');
-                            dataValue = dataValue.replace(/(DKI|DIY|NTB|NTT)(?=[A-Z])/g, '$1 ');
-                            dataValue = dataValue.replace(/([a-z])([A-Z])/g, '$1 $2');
-                            dataValue = dataValue.replace(/Jakarta Jabar/gi, 'Jakarta - Jabar');
-                            dataValue = dataValue.replace(/Jateng DIY/gi, 'Jateng - DIY');
-                            dataValue = dataValue.replace(/Jatim Bali/gi, 'Jatim - Bali');
+                        // LOGIKA PENERJEMAH KHUSUS UNTUK "NK JEMBATAN" AGAR LEBIH INFORMATIF
+                        if (item.key.toLowerCase() === 'jbt' && dataValue !== '-') {
+                            const angkaNK = parseInt(dataValue);
+                            if (angkaNK === 0) dataValue = "0 (Baik)";
+                            else if (angkaNK === 1) dataValue = "1 (Rusak Ringan)";
+                            else if (angkaNK === 2) dataValue = "2 (Rusak Sedang)";
+                            else if (angkaNK === 3) dataValue = "3 (Rusak Berat)";
+                            else if (angkaNK === 4) dataValue = "4 (Kritis)";
+                            else if (angkaNK === 5) dataValue = "5 (Lintasan Basah / Belum Terbangun)";
                         }
 
-                        isiPopup += `
-                                <tr>
-                                    <td style="color: #666; width: 40%; padding: 8px 0; border-bottom: 1px solid #f0f0f0; text-transform: capitalize; vertical-align: top;">
-                                        ${labelFormated}
-                                    </td>
-                                    <td style="font-weight: 600; padding: 8px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.5; color: #222;">
-                                        ${dataValue}
-                                    </td>
-                                </tr>
-                        `;
+                        isiPopup += `<tr><td style="color: #666; width: 45%; padding: 8px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top;">${item.label}</td><td style="font-weight: 600; padding: 8px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.5; color: #222;">${dataValue}</td></tr>`;
+                    });
+                } else {
+                    for (let key in props) {
+                        if (props[key] !== null && props[key] !== '' && key.toLowerCase() !== 'objectid' && key.toLowerCase() !== 'globalid' && key.toLowerCase() !== 'fid' && key.toLowerCase() !== 'shape__length') {
+                            let labelFormated = key.replace(/_/g, ' ');
+                            let dataValue = props[key];
+
+                            if (typeof dataValue === 'string') {
+                                dataValue = dataValue.replace(/;\s*/g, ', ').replace(/(BBPJN|BPJN)(?=[A-Z])/g, '$1 ').replace(/(DKI|DIY|NTB|NTT)(?=[A-Z])/g, '$1 ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/Jakarta Jabar/gi, 'Jakarta - Jabar').replace(/Jateng DIY/gi, 'Jateng - DIY').replace(/Jatim Bali/gi, 'Jatim - Bali');
+                            }
+                            isiPopup += `<tr><td style="color: #666; width: 40%; padding: 8px 0; border-bottom: 1px solid #f0f0f0; text-transform: capitalize; vertical-align: top;">${labelFormated}</td><td style="font-weight: 600; padding: 8px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.5; color: #222;">${dataValue}</td></tr>`;
+                        }
                     }
                 }
 
                 isiPopup += `</table>`;
-
-                if (baseUrlLayer && objectId) {
-                    isiPopup += `<div id="${idDivFoto}" style="margin-top: 15px; text-align: center; font-size: 12px; color: #888;">Sedang mengecek foto...</div>`;
-                }
-
+                if (baseUrlLayer && objectId) { isiPopup += `<div id="${idDivFoto}" style="margin-top: 15px; text-align: center; font-size: 12px; color: #888;">Sedang mengecek foto...</div>`; }
                 isiPopup += `</div></div>`;
 
-                new maplibregl.Popup({ closeButton: true, maxWidth: '320px' })
-                    .setLngLat(koordinat)
-                    .setHTML(isiPopup)
-                    .addTo(map);
+                new maplibregl.Popup({ closeButton: true, maxWidth: '320px' }).setLngLat(koordinat).setHTML(isiPopup).addTo(map);
 
                 if (baseUrlLayer && objectId) {
-                    const urlAttachment = `${baseUrlLayer}/${objectId}/attachments?f=json`;
-                    fetch(urlAttachment)
-                        .then(response => response.json())
-                        .then(data => {
-                            const wadahFoto = document.getElementById(idDivFoto);
-                            if (wadahFoto) {
-                                if (data.attachmentInfos && data.attachmentInfos.length > 0) {
-                                    let htmlFoto = '<h4 style="margin: 10px 0; font-size: 14px; color: #333; text-align: left; border-top: 1px solid #eee; padding-top: 10px;">📸 Foto Lokasi:</h4>';
-                                    data.attachmentInfos.forEach(att => {
-                                        const urlGambar = `${baseUrlLayer}/${objectId}/attachments/${att.id}`;
-                                        htmlFoto += `<img src="${urlGambar}" alt="Foto Lokasi" style="width: 100%; border-radius: 6px; margin-bottom: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
-                                    });
-                                    wadahFoto.innerHTML = htmlFoto;
-                                } else {
-                                    wadahFoto.innerHTML = '';
-                                }
-                            }
-                        })
-                        .catch(err => {
-                            const wadahFoto = document.getElementById(idDivFoto);
-                            if (wadahFoto) wadahFoto.innerHTML = '';
-                        });
+                    fetch(`${baseUrlLayer}/${objectId}/attachments?f=json`).then(res => res.json()).then(data => {
+                        const wadahFoto = document.getElementById(idDivFoto);
+                        if (wadahFoto) {
+                            if (data.attachmentInfos && data.attachmentInfos.length > 0) {
+                                let htmlFoto = '<h4 style="margin: 10px 0; font-size: 14px; color: #333; text-align: left; border-top: 1px solid #eee; padding-top: 10px;">📸 Foto Lokasi:</h4>';
+                                data.attachmentInfos.forEach(att => { htmlFoto += `<img src="${baseUrlLayer}/${objectId}/attachments/${att.id}" alt="Foto Lokasi" style="width: 100%; border-radius: 6px; margin-bottom: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`; });
+                                wadahFoto.innerHTML = htmlFoto;
+                            } else { wadahFoto.innerHTML = ''; }
+                        }
+                    }).catch(() => { const wadah = document.getElementById(idDivFoto); if (wadah) wadah.innerHTML = ''; });
                 }
             }
 
-            // Mendaftarkan kursor & klik
-            ['layer-posko', 'layer-banjir', 'layer-longsor', 'layer-kondisi-jalan'].forEach(layer => {
+            ['layer-posko', 'layer-banjir', 'layer-longsor', 'layer-kondisi-jalan', 'layer-jembatan'].forEach(layer => {
                 map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
                 map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
             });
 
-            map.on('click', 'layer-kondisi-jalan', (e) => {
-                tampilkanPopup(e, '#10b981', 'Informasi Kondisi Jalan', '🛣️', null);
+            // Klik Pop-up Jembatan
+            map.on('click', 'layer-jembatan', (e) => {
+                const props = e.features[0].properties;
+                const namaJembatan = props.nama_jemba || props.NAMA_JEMBA || props.nama_jembatan || 'DETAIL JEMBATAN';
+
+                const fieldYangDitampilkan = [
+                    { label: 'Nama Ruas', key: 'nama_ruas' },
+                    { label: 'NK Jembatan', key: 'jbt' },
+                    { label: 'Provinsi', key: 'provinsi' }
+                ];
+
+                tampilkanPopup(e, '#4b5563', namaJembatan, '🌉', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/NK_JEMBATAN_2024/FeatureServer/0', fieldYangDitampilkan);
             });
-            map.on('click', 'layer-posko', (e) => {
-                tampilkanPopup(e, '#f59e0b', 'Detail Posko Mudik', '⛺', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0');
-            });
-            map.on('click', 'layer-banjir', (e) => {
-                tampilkanPopup(e, '#0ea5e9', 'Titik Rawan Banjir', '🌊', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0');
-            });
-            map.on('click', 'layer-longsor', (e) => {
-                tampilkanPopup(e, '#8b4513', 'Titik Rawan Longsor', '🪨', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0');
-            });
+
+            // Klik Pop-up Lainnya
+            map.on('click', 'layer-kondisi-jalan', (e) => { tampilkanPopup(e, '#10b981', 'Informasi Kondisi Jalan', '🛣️', null); });
+            map.on('click', 'layer-posko', (e) => { tampilkanPopup(e, '#f59e0b', 'Detail Posko Mudik', '⛺', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0'); });
+            map.on('click', 'layer-banjir', (e) => { tampilkanPopup(e, '#0ea5e9', 'Titik Rawan Banjir', '🌊', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0'); });
+            map.on('click', 'layer-longsor', (e) => { tampilkanPopup(e, '#8b4513', 'Titik Rawan Longsor', '🪨', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0'); });
         });
 
-        // =====================================
-        // LOGIKA TOGGLE MENU LAINNYA
-        // =====================================
-        document.getElementById('toggle-nasional').addEventListener('change', function (e) { map.setLayoutProperty('layer-jalan-nasional', 'visibility', e.target.checked ? 'visible' : 'none'); });
-        document.getElementById('toggle-tol').addEventListener('change', function (e) { map.setLayoutProperty('layer-jalan-tol', 'visibility', e.target.checked ? 'visible' : 'none'); });
-        document.getElementById('toggle-posko').addEventListener('change', function (e) { map.setLayoutProperty('layer-posko', 'visibility', e.target.checked ? 'visible' : 'none'); });
-        document.getElementById('toggle-banjir').addEventListener('change', function (e) { map.setLayoutProperty('layer-banjir', 'visibility', e.target.checked ? 'visible' : 'none'); });
-        document.getElementById('toggle-longsor').addEventListener('change', function (e) { map.setLayoutProperty('layer-longsor', 'visibility', e.target.checked ? 'visible' : 'none'); });
+        // ==============================================================
+        // LOGIKA KLIK TOMBOL & SINKRONISASI LEGENDA
+        // ==============================================================
+        function perbaruiKotakLegendaUtama() {
+            const listSection = ['legend-item-posko', 'legend-item-tol', 'legend-item-nasional', 'legend-item-kondisi', 'legend-item-jembatan', 'legend-group-rawan'];
+            let adaYangAktif = false;
+            listSection.forEach(id => {
+                if (document.getElementById(id).style.display !== 'none') adaYangAktif = true;
+            });
+            document.getElementById('legend-box').style.display = adaYangAktif ? 'block' : 'none';
+        }
+
+        function aturTombolLayer(idTombol, idLayer, idLegendItem = null, isGroupRawan = false) {
+            const tombol = document.getElementById(idTombol);
+            tombol.addEventListener('click', function () {
+                this.classList.toggle('active');
+                const isNyala = this.classList.contains('active');
+
+                map.setLayoutProperty(idLayer, 'visibility', isNyala ? 'visible' : 'none');
+
+                if (idLegendItem) {
+                    const legendEl = document.getElementById(idLegendItem);
+                    if (legendEl) {
+                        if (isGroupRawan) {
+                            legendEl.style.display = isNyala ? 'flex' : 'none';
+                            const banjirNyala = document.getElementById('toggle-banjir').classList.contains('active');
+                            const longsorNyala = document.getElementById('toggle-longsor').classList.contains('active');
+                            document.getElementById('legend-group-rawan').style.display = (banjirNyala || longsorNyala) ? 'block' : 'none';
+                        } else {
+                            legendEl.style.display = isNyala ? 'block' : 'none';
+                        }
+                    }
+                }
+                perbaruiKotakLegendaUtama();
+            });
+        }
+
+        aturTombolLayer('toggle-nasional', 'layer-jalan-nasional', 'legend-item-nasional');
+        aturTombolLayer('toggle-tol', 'layer-jalan-tol', 'legend-item-tol');
+        aturTombolLayer('toggle-kondisi', 'layer-kondisi-jalan', 'legend-item-kondisi');
+        aturTombolLayer('toggle-jembatan', 'layer-jembatan', 'legend-item-jembatan');
+        aturTombolLayer('toggle-posko', 'layer-posko', 'legend-item-posko');
+        aturTombolLayer('toggle-banjir', 'layer-banjir', 'legend-item-banjir', true);
+        aturTombolLayer('toggle-longsor', 'layer-longsor', 'legend-item-longsor', true);
     </script>
 
 </body>
