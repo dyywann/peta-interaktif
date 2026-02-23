@@ -82,26 +82,30 @@
         </label>
 
         <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
+            <input type="checkbox" id="toggle-kondisi" checked style="margin-right: 10px; width: 16px; height: 16px;">
+            <span
+                style="display: inline-block; width: 16px; height: 4px; background: linear-gradient(90deg, #10b981 33%, #facc15 33%, #facc15 66%, #ef4444 66%); border-radius: 2px; margin-right: 8px;"></span>
+            Kondisi Jalan
+        </label>
+
+        <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
             <input type="checkbox" id="toggle-posko" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span style="font-size: 18px; margin-right: 8px;">⛺</span>
-            Posko Mudik
+            <span style="font-size: 18px; margin-right: 8px;">⛺</span> Posko Mudik
         </label>
 
         <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; font-size: 14px;">
             <input type="checkbox" id="toggle-banjir" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span style="font-size: 18px; margin-right: 8px;">🌊</span>
-            Rawan Banjir
+            <span style="font-size: 18px; margin-right: 8px;">🌊</span> Rawan Banjir
         </label>
 
         <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px;">
             <input type="checkbox" id="toggle-longsor" checked style="margin-right: 10px; width: 16px; height: 16px;">
-            <span style="font-size: 18px; margin-right: 8px;">🪨</span>
-            Rawan Longsor
+            <span style="font-size: 18px; margin-right: 8px;">🪨</span> Rawan Longsor
         </label>
     </div>
 
     <div
-        style="position: absolute; bottom: 30px; right: 20px; z-index: 10; background: white; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); font-family: sans-serif; width: 220px; overflow: hidden;">
+        style="position: absolute; bottom: 30px; right: 20px; z-index: 10; background: white; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); font-family: sans-serif; width: 240px; overflow: hidden;">
 
         <div
             style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
@@ -119,6 +123,17 @@
             style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center; justify-content: space-between;">
             <div style="font-size: 13px; font-weight: 600; color: #444;">Rawan Longsor</div>
             <span style="font-size: 18px;">🪨</span>
+        </div>
+
+        <div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea;">
+            <div style="font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px;">Kondisi Jalan (IRI)</div>
+            <div
+                style="display: flex; font-size: 10px; font-weight: bold; color: white; text-align: center; border-radius: 4px; overflow: hidden;">
+                <div style="flex: 1; background: #10b981; padding: 5px 0;" title="0 - 4">Baik</div>
+                <div style="flex: 1; background: #facc15; color: #333; padding: 5px 0;" title="4 - 8">Sdg</div>
+                <div style="flex: 1; background: #f97316; padding: 5px 0;" title="8 - 12">Rgn</div>
+                <div style="flex: 1; background: #ef4444; padding: 5px 0;" title="> 12">Brt</div>
+            </div>
         </div>
 
         <div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea; display: flex; align-items: center;">
@@ -166,7 +181,9 @@
 
         map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
-        // Fungsi menggambar Emoji ke Kanvas Peta
+        // =========================================================
+        // TRIK MENGGAMBAR EMOJI
+        // =========================================================
         async function buatIkonDariEmoji(map, idNama, emoji, ukuran = 40) {
             const canvas = document.createElement('canvas');
             canvas.width = ukuran;
@@ -196,55 +213,131 @@
                 buatIkonDariEmoji(map, 'emoji-longsor', '🪨')
             ]);
 
-            // 2. Garis Jalan
+            // 2. Garis Jalan Nasional
             map.addSource('data-jalan-nasional', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/Jalan_Nasional_PPK_Satker/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
             map.addLayer({ id: 'layer-jalan-nasional', type: 'line', source: 'data-jalan-nasional', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#e63946', 'line-width': 2, 'line-opacity': 0.8 } });
 
+            // 3. Garis Jalan Tol
             map.addSource('data-jalan-tol', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Tol/Jalan_Tol_Operasi/MapServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
             map.addLayer({ id: 'layer-jalan-tol', type: 'line', source: 'data-jalan-tol', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 0.9 } });
 
-            // 3. LAYER DATA RAWAN BENCANA
-            map.addSource('data-bencana', {
+            // =========================================================================
+            // 4. LAYER KONDISI JALAN (Dikosongkan di awal, langsung diisi oleh fungsi pintar)
+            // =========================================================================
+            map.addSource('data-kondisi-jalan', {
                 type: 'geojson',
-                data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson'
+                data: { type: 'FeatureCollection', features: [] }
             });
 
             map.addLayer({
-                id: 'layer-banjir',
-                type: 'symbol',
-                source: 'data-bencana',
+                id: 'layer-kondisi-jalan',
+                type: 'line',
+                source: 'data-kondisi-jalan',
+                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                paint: {
+                    'line-width': 7, // Dipertebal agar menutupi garis jalan nasional
+                    'line-color': [
+                        'case',
+                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 12], '#ef4444',   // Merah (Rusak Berat)
+                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 8], '#f97316',    // Oranye (Rusak Ringan)
+                        ['>', ['to-number', ['coalesce', ['get', 'MEAN_IRI_POK'], ['get', 'mean_iri_pok'], 0]], 4], '#facc15',    // Kuning (Sedang)
+                        '#10b981' // DEFAULT HIJAU JIKA KONDISI BAIK (<=4)
+                    ],
+                    'line-opacity': 1
+                }
+            });
+
+            // --- FUNGSI PINTAR TARIK DATA (RADAR LAYAR) ---
+            let delayTarikData;
+            function muatDataKondisiJalan() {
+                // Jangan tarik data jika menu Kondisi Jalan sedang tidak dicentang
+                if (!document.getElementById('toggle-kondisi').checked) {
+                    map.getSource('data-kondisi-jalan').setData({ type: 'FeatureCollection', features: [] });
+                    return;
+                }
+
+                // Ambil koordinat batas layar saat ini
+                const bounds = map.getBounds();
+                const w = bounds.getWest();
+                const s = bounds.getSouth();
+                const e = bounds.getEast();
+                const n = bounds.getNorth();
+
+                // Perlebar areanya sedikit agar saat digeser jalannya tidak langsung putus
+                const dw = (e - w) * 0.2;
+                const dh = (n - s) * 0.2;
+
+                // Tembak server Bina Marga HANYA untuk jalan yang terlihat di layar ini (Anti-Crash!)
+                const url = `https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/IRI_2_2025/FeatureServer/0/query?f=geojson&geometry=${w - dw},${s - dh},${e + dw},${n + dh}&geometryType=esriGeometryEnvelope&inSR=4326&outSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&where=1=1&resultRecordCount=10000`;
+
+                fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.type === 'FeatureCollection' && map.getSource('data-kondisi-jalan')) {
+                            // Suntikkan jalan langsung ke layar!
+                            map.getSource('data-kondisi-jalan').setData(data);
+                        }
+                    })
+                    .catch(err => console.log('Sinyal ke server Bina Marga terputus'));
+            }
+
+            // 1. Eksekusi fungsi pintar LANGSUNG SAAT DETIK PERTAMA WEB DIBUKA
+            muatDataKondisiJalan();
+
+            // 2. Eksekusi ulang SETIAP KALI PETA SELESAI DIGESER/DIZOOM (Dengan delay agar server tidak ngadat)
+            map.on('moveend', () => {
+                clearTimeout(delayTarikData);
+                delayTarikData = setTimeout(muatDataKondisiJalan, 300);
+            });
+
+            // 3. Eksekusi otomatis jika menu dicentang
+            document.getElementById('toggle-kondisi').addEventListener('change', function (e) {
+                map.setLayoutProperty('layer-kondisi-jalan', 'visibility', e.target.checked ? 'visible' : 'none');
+                muatDataKondisiJalan();
+            });
+
+            // =====================================
+            // 5. LAYER DATA BENCANA & POSKO
+            // =====================================
+            map.addSource('data-bencana', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
+
+            map.addLayer({
+                id: 'layer-banjir', type: 'symbol', source: 'data-bencana',
                 filter: ['any', ['==', ['get', 'jenis'], 'RawanBanjir'], ['==', ['get', 'jenis'], 'RawanBanjirBandang']],
                 layout: { 'icon-image': 'emoji-banjir', 'icon-size': 0.8, 'icon-allow-overlap': true }
             });
 
             map.addLayer({
-                id: 'layer-longsor',
-                type: 'symbol',
-                source: 'data-bencana',
+                id: 'layer-longsor', type: 'symbol', source: 'data-bencana',
                 filter: ['==', ['get', 'jenis'], 'RawanLongsor'],
                 layout: { 'icon-image': 'emoji-longsor', 'icon-size': 0.8, 'icon-allow-overlap': true }
             });
 
-            // 4. Layer Posko
             map.addSource('data-posko', { type: 'geojson', data: 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson' });
+
             map.addLayer({
-                id: 'layer-posko',
-                type: 'symbol',
-                source: 'data-posko',
+                id: 'layer-posko', type: 'symbol', source: 'data-posko',
                 layout: { 'icon-image': 'emoji-posko', 'icon-size': 0.9, 'icon-allow-overlap': true }
             });
 
             // =====================================
-            // 5. FITUR POPUP (DILENGKAPI PENDETEKSI FOTO)
+            // 6. FITUR POPUP (TERMASUK TARIK FOTO)
             // =====================================
-            // Parameter baseUrlLayer ditambahkan untuk mengetahui alamat server asal layer tersebut
             function tampilkanPopup(e, warnaAksen, judulPopup, emojiBawaan, baseUrlLayer) {
                 const props = e.features[0].properties;
-                const koordinat = e.features[0].geometry.coordinates.slice();
 
-                // Mengambil ID unik dari data (biasanya bernama objectid atau OBJECTID)
+                let koordinat;
+                if (e.features[0].geometry.type === 'Point') {
+                    koordinat = e.features[0].geometry.coordinates.slice();
+                    while (Math.abs(e.lngLat.lng - koordinat[0]) > 180) {
+                        koordinat[0] += e.lngLat.lng > koordinat[0] ? 360 : -360;
+                    }
+                } else {
+                    koordinat = [e.lngLat.lng, e.lngLat.lat];
+                }
+
                 const objectId = props.objectid || props.OBJECTID;
-                const idDivFoto = 'foto-' + Math.random().toString(36).substr(2, 9); // ID acak untuk wadah foto
+                const idDivFoto = 'foto-' + Math.random().toString(36).substr(2, 9);
 
                 let isiPopup = `
                     <div style="font-family: sans-serif;">
@@ -286,54 +379,37 @@
 
                 isiPopup += `</table>`;
 
-                // Menyisipkan wadah (container) kosong untuk foto yang akan dimuat nanti
                 if (baseUrlLayer && objectId) {
                     isiPopup += `<div id="${idDivFoto}" style="margin-top: 15px; text-align: center; font-size: 12px; color: #888;">Sedang mengecek foto...</div>`;
                 }
 
                 isiPopup += `</div></div>`;
 
-                while (Math.abs(e.lngLat.lng - koordinat[0]) > 180) {
-                    koordinat[0] += e.lngLat.lng > koordinat[0] ? 360 : -360;
-                }
-
-                // Tampilkan Popup ke layar
                 new maplibregl.Popup({ closeButton: true, maxWidth: '320px' })
                     .setLngLat(koordinat)
                     .setHTML(isiPopup)
                     .addTo(map);
 
-                // ==========================================
-                // LOGIKA MENARIK FOTO SECARA ASYNCHRONOUS
-                // ==========================================
-                // Setelah popup muncul di layar, kita tembak server Bina Marga untuk mencari attachment fotonya
                 if (baseUrlLayer && objectId) {
                     const urlAttachment = `${baseUrlLayer}/${objectId}/attachments?f=json`;
-
                     fetch(urlAttachment)
                         .then(response => response.json())
                         .then(data => {
                             const wadahFoto = document.getElementById(idDivFoto);
                             if (wadahFoto) {
-                                // Jika ada lampiran fotonya
                                 if (data.attachmentInfos && data.attachmentInfos.length > 0) {
                                     let htmlFoto = '<h4 style="margin: 10px 0; font-size: 14px; color: #333; text-align: left; border-top: 1px solid #eee; padding-top: 10px;">📸 Foto Lokasi:</h4>';
-
-                                    // Looping untuk merender semua foto yang tersedia
                                     data.attachmentInfos.forEach(att => {
                                         const urlGambar = `${baseUrlLayer}/${objectId}/attachments/${att.id}`;
                                         htmlFoto += `<img src="${urlGambar}" alt="Foto Lokasi" style="width: 100%; border-radius: 6px; margin-bottom: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
                                     });
-
-                                    wadahFoto.innerHTML = htmlFoto; // Masukkan foto ke dalam popup
+                                    wadahFoto.innerHTML = htmlFoto;
                                 } else {
-                                    // Jika tidak ada foto, hilangkan teks "Sedang mengecek foto..."
                                     wadahFoto.innerHTML = '';
                                 }
                             }
                         })
                         .catch(err => {
-                            // Jika terjadi error saat memuat foto, hilangkan pesan
                             const wadahFoto = document.getElementById(idDivFoto);
                             if (wadahFoto) wadahFoto.innerHTML = '';
                         });
@@ -341,45 +417,33 @@
             }
 
             // Mendaftarkan kursor & klik
-            ['layer-posko', 'layer-banjir', 'layer-longsor'].forEach(layer => {
+            ['layer-posko', 'layer-banjir', 'layer-longsor', 'layer-kondisi-jalan'].forEach(layer => {
                 map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
                 map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
             });
 
-            // Klik Posko Mudik (Menyertakan URL Base Layer Posko untuk menarik Foto)
+            map.on('click', 'layer-kondisi-jalan', (e) => {
+                tampilkanPopup(e, '#10b981', 'Informasi Kondisi Jalan', '🛣️', null);
+            });
             map.on('click', 'layer-posko', (e) => {
                 tampilkanPopup(e, '#f59e0b', 'Detail Posko Mudik', '⛺', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_0ddb83d90f944c1f91fa0cb6ff281e9b/FeatureServer/0');
             });
-
-            // Klik Rawan Banjir (Menyertakan URL Base Layer Bencana)
             map.on('click', 'layer-banjir', (e) => {
                 tampilkanPopup(e, '#0ea5e9', 'Titik Rawan Banjir', '🌊', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0');
             });
-
-            // Klik Rawan Longsor (Menyertakan URL Base Layer Bencana)
             map.on('click', 'layer-longsor', (e) => {
                 tampilkanPopup(e, '#8b4513', 'Titik Rawan Longsor', '🪨', 'https://gisportal.binamarga.pu.go.id/arcgis/rest/services/Hosted/service_829906749c8c4750a71a00e1b1962497/FeatureServer/0');
             });
         });
 
         // =====================================
-        // 6. LOGIKA TOGGLE
+        // LOGIKA TOGGLE MENU LAINNYA
         // =====================================
-        document.getElementById('toggle-nasional').addEventListener('change', function (e) {
-            map.setLayoutProperty('layer-jalan-nasional', 'visibility', e.target.checked ? 'visible' : 'none');
-        });
-        document.getElementById('toggle-tol').addEventListener('change', function (e) {
-            map.setLayoutProperty('layer-jalan-tol', 'visibility', e.target.checked ? 'visible' : 'none');
-        });
-        document.getElementById('toggle-posko').addEventListener('change', function (e) {
-            map.setLayoutProperty('layer-posko', 'visibility', e.target.checked ? 'visible' : 'none');
-        });
-        document.getElementById('toggle-banjir').addEventListener('change', function (e) {
-            map.setLayoutProperty('layer-banjir', 'visibility', e.target.checked ? 'visible' : 'none');
-        });
-        document.getElementById('toggle-longsor').addEventListener('change', function (e) {
-            map.setLayoutProperty('layer-longsor', 'visibility', e.target.checked ? 'visible' : 'none');
-        });
+        document.getElementById('toggle-nasional').addEventListener('change', function (e) { map.setLayoutProperty('layer-jalan-nasional', 'visibility', e.target.checked ? 'visible' : 'none'); });
+        document.getElementById('toggle-tol').addEventListener('change', function (e) { map.setLayoutProperty('layer-jalan-tol', 'visibility', e.target.checked ? 'visible' : 'none'); });
+        document.getElementById('toggle-posko').addEventListener('change', function (e) { map.setLayoutProperty('layer-posko', 'visibility', e.target.checked ? 'visible' : 'none'); });
+        document.getElementById('toggle-banjir').addEventListener('change', function (e) { map.setLayoutProperty('layer-banjir', 'visibility', e.target.checked ? 'visible' : 'none'); });
+        document.getElementById('toggle-longsor').addEventListener('change', function (e) { map.setLayoutProperty('layer-longsor', 'visibility', e.target.checked ? 'visible' : 'none'); });
     </script>
 
 </body>
